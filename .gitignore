@@ -1,0 +1,74 @@
+# Python
+_pycache_/
+*.py[cod]
+*$py.class
+
+# Django
+*.log
+*.pot
+*.pyc
+db.sqlite3
+media/
+staticfiles/
+local_settings.py
+
+# Environment Variables
+.env
+.env.*
+
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv/
+.ENV/
+
+# VS Code
+.vscode/
+
+# macOS
+.DS_Store
+
+# IDEs
+.idea/
+*.swp
+*.swo
+
+# Byte-compiled / optimized / DLL files
+*.pyd
+*.so
+*.dll
+
+# Migrations (optional, if auto-generated every time)
+*/migrations/.py
+!**/migrations/_init_.py
+
+# Coverage and test results
+htmlcov/
+.coverage
+.tox/
+.nox/
+.pytest_cache/
+coverage.xml
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# Node / frontend (if using npm/yarn for any JS/React frontend)
+node_modules/
+*.lock
+
+# Jupyter Notebooks (if experimenting with OpenAI in notebooks)
+.ipynb_checkpoints/
+
+# Logs
+*.log
+
+# OpenAI SDK Cache (if using any tools with cache)
+.openai/
+
+# System files
+Thumbs.db
+ehthumbs.db
