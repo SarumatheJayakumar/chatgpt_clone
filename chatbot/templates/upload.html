@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Document</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .upload-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            width: 350px;
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        /* Hide default file input */
+        .file-input {
+            display: none;
+        }
+
+        .custom-file-label {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+
+        .custom-file-label:hover {
+            background-color: #0056b3;
+        }
+
+        button {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        a.back-link {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        a.back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="upload-container">
+    <h2>Upload a Document</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <label for="file-upload" class="custom-file-label">Choose a file</label>
+        <input id="file-upload" name="file" type="file" class="file-input" required>
+        
+        <br>
+        <button type="submit">Upload</button>
+    </form>
+
+    <a href="{% url 'chatbot' %}" class="back-link">← Back to Chat</a>
+</div>
+
+<script>
+    // Optional: Show the selected file name in the label
+    const fileInput = document.getElementById('file-upload');
+    const label = document.querySelector('.custom-file-label');
+
+    fileInput.addEventListener('change', function() {
+        if (fileInput.files.length > 0) {
+            label.textContent = 'Selected: ' + fileInput.files[0].name;
+        }
+    });
+</script>
+
+</body>
+</html>

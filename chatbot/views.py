@@ -6,6 +6,8 @@ from django.contrib.auth import authenticate, login, logout
 from dotenv import load_dotenv, find_dotenv
 import openai
 import os
+from .models import Document, Chat
+from .forms import DocumentForm
 
 # Load .env variables
 load_dotenv(find_dotenv())
@@ -13,8 +15,9 @@ load_dotenv(find_dotenv())
 # Set OpenAI API key
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-@login_required
+
 @csrf_exempt
+@login_required
 def chatbot(request):
     if request.method == 'POST':
         user_message = request.POST.get('message')
@@ -25,18 +28,38 @@ def chatbot(request):
                     messages=[{"role": "user", "content": user_message}]
                 )
                 choices = response['choices'][0]
-                bot_reply = choices['message']['content'].strip() if 'message' in choices else choices.get('text', '').strip()
+                bot_reply = choices['message']['content'].strip() if 'message' in choices else choices['text'].strip()
 
-            except openai.error.RateLimitError as e:
-                print("OpenAI API error:", e)
-                bot_reply = "API quota exceeded. Please check your OpenAI API plan and billing details."
+                # Save the chat history
+                Chat.objects.create(
+                    user=request.user,
+                    message=user_message,
+                    response=bot_reply
+                )
+
             except Exception as e:
                 print("OpenAI API error:", e)
                 bot_reply = "Sorry, I couldn't process your request."
 
             return JsonResponse({'response': bot_reply})
 
-    return render(request, 'chatbot.html')
+    # Load previous chat history
+    chats = Chat.objects.filter(user=request.user).order_by('timestamp')
+    return render(request, 'chatbot.html', {'chats': chats})
+
+
+@login_required
+def upload_document(request):
+    if request.method == 'POST':
+        form = DocumentForm(request.POST, request.FILES)
+        if form.is_valid():
+            doc = form.save(commit=False)
+            doc.user = request.user
+            doc.save()
+            return redirect('chatbot')
+    else:
+        form = DocumentForm()
+    return render(request, 'upload.html', {'form': form})
 
 
 def user_login(request):

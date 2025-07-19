@@ -16,6 +16,7 @@
             background: #f0f2f5;
             display: flex;
             flex-direction: column;
+            position: relative;
         }
 
         header {
@@ -85,12 +86,66 @@
         button:hover {
             background: #0056b3;
         }
+
+        .logout-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background-color: #bbeef7;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .logout-btn:hover {
+            background-color: #ff1a1a;
+        }
+
+            .top-buttons {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+}
+
+.action-btn {
+    background-color: #007bff;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+.action-btn:hover {
+    background-color: #0056b3;
+}
+
+
+
     </style>
 </head>
 <body>
+    
+    <div class="top-buttons">
+    <a href="{% url 'upload_document' %}" class="action-btn">Upload Document</a>
+    <a href="{% url 'logout' %}" class="action-btn">Logout</a>
+</div>
+
+
     <header>ChatGPT Clone</header>
 
-    <div id="chat-box"></div>
+    <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+
+    <div id="chat-box">
+    {% for chat in chats %}
+        <div class="message user-message"><strong>You:</strong> {{ chat.message }}</div>
+        <div class="message bot-message"><strong>Bot:</strong> {{ chat.response }}</div>
+    {% endfor %}
+</div>
+
 
     <form id="chat-form">
         {% csrf_token %}
@@ -134,7 +189,6 @@
             chatBox.scrollTop = chatBox.scrollHeight;
         }
     </script>
-    <a href="{% url 'logout' %}">Logout</a>
 
 </body>
 </html>
